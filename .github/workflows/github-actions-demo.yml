@@ -14,7 +14,7 @@ on:
         required: true
 
 jobs:
-  build:
+  Build:
     name: deploy to staging
     runs-on: ubuntu-18.04
 
@@ -29,5 +29,23 @@ jobs:
         run: |
           echo "The repository ${{ github.repository }} contains the following files:"
           tree
+
+  Test:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    needs: Build
+    environment: Test
+    steps:
+      - run: echo "🧪 Testing..."
+
+  Acceptance:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    needs: Build
+    environment: Load-Test
+    steps:
+      - run: |
+          echo "🧪 Testing..."
+          sleep 15
 
     
